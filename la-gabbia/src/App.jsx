@@ -11,12 +11,14 @@ const App = () => {
   return (
     <BrowserRouter>
       <Header />
+      <div style={{ paddingTop: '72px' }}> 
       <Routes>
-        <Route path="/" element={<Menu />} />
+        <Route path="/menu" element={<Menu />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/complete-order" element={<CompleteOrder />} />
         <Route path="/orders" element={<Orders />} />
       </Routes>
+      </div>
     </BrowserRouter>
   )
 }
