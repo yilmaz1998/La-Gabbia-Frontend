@@ -6,12 +6,19 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import TextField from '@mui/material/TextField';
 
 const typeOrder = ['Salad', 'Snack', 'Burger', 'Pizza', 'Pasta', 'Dessert', 'Drink']
 
 const Menu = () => {
   const [menuItems, setMenuItems] = useState([])
   const [loading, setLoading] = useState(true)
+  const [open, setOpen] = useState(false)
+  const [selectedItem, setSelectedItem] = useState(null)
 
   useEffect(() => {
     const fetchMenuItems = async () => {
@@ -27,6 +34,16 @@ const Menu = () => {
 
     fetchMenuItems()
   }, [])
+
+  const handleDialogOpen = (item) => {
+    setOpen(true)
+    setSelectedItem(item)
+  }
+
+  const handleDialogClose = () => {
+    setOpen(false)
+    setSelectedItem(null)
+  }
 
   const getItemsByType = (type) => menuItems.filter(item => item.type === type)
 
@@ -62,7 +79,15 @@ const Menu = () => {
                       </Typography>
                     </CardContent>
                     <CardActions>
-                      <Button size="small">Add to Cart</Button>
+                      <Button
+                        size="small"
+                        onClick={() => {
+                          setSelectedItem(item);
+                          handleDialogOpen(true);
+                        }}
+                      >
+                        Add to Cart
+                      </Button>
                     </CardActions>
                   </Card>
                 ))}
@@ -71,6 +96,31 @@ const Menu = () => {
           )
         })
       )}
+      <Dialog open={open} onClose={handleDialogClose}>
+        <DialogTitle>Add Special Instructions</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Special Instructions"
+            type="text"
+            fullWidth
+            variant="outlined"
+          />
+          <TextField
+            margin="dense"
+            label="Quantity"
+            type="number"
+            fullWidth
+            variant="outlined"
+            inputProps={{ min: 1 }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose}>Cancel</Button>
+          <Button variant="contained">Add</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   )
 }
