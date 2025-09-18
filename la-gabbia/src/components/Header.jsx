@@ -8,7 +8,7 @@ const Header = () => {
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-gray-900 text-white shadow-md z-50 flex items-center justify-between px-4 h-16">
-      <Link to={"/"} className='flex gap-1 text-xl'>
+      <Link to={"/menu"} className='flex gap-1 text-xl'>
         <IoFastFoodOutline />La Gabbia
       </Link>
       <button

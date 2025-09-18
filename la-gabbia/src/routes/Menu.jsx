@@ -11,6 +11,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import TextField from '@mui/material/TextField';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../store/cartSlice';
 
 const typeOrder = ['Salad', 'Snack', 'Burger', 'Pizza', 'Pasta', 'Dessert', 'Drink']
 
@@ -19,6 +21,9 @@ const Menu = () => {
   const [loading, setLoading] = useState(true)
   const [open, setOpen] = useState(false)
   const [selectedItem, setSelectedItem] = useState(null)
+  const [instructions, setInstructions] = useState('')
+  const [quantity, setQuantity] = useState(1)
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchMenuItems = async () => {
@@ -34,6 +39,12 @@ const Menu = () => {
 
     fetchMenuItems()
   }, [])
+
+  const addItemToCart = (item, instructions, quantity) => {
+    console.log(item);
+    dispatch(addToCart({ ...item, instruction: instructions, quantity }));
+    handleDialogClose();
+  }
 
   const handleDialogOpen = (item) => {
     setOpen(true)
@@ -83,7 +94,7 @@ const Menu = () => {
                         size="small"
                         onClick={() => {
                           setSelectedItem(item);
-                          handleDialogOpen(true);
+                          handleDialogOpen(item);
                         }}
                       >
                         Add to Cart
@@ -106,6 +117,8 @@ const Menu = () => {
             type="text"
             fullWidth
             variant="outlined"
+            value={instructions}
+            onChange={(e) => setInstructions(e.target.value)}
           />
           <TextField
             margin="dense"
@@ -114,11 +127,15 @@ const Menu = () => {
             fullWidth
             variant="outlined"
             inputProps={{ min: 1 }}
+            value={quantity}
+            onChange={(e) => setQuantity(Number(e.target.value))}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDialogClose}>Cancel</Button>
-          <Button variant="contained">Add</Button>
+          <Button
+            variant="contained"
+            onClick={() => addItemToCart(selectedItem, instructions, quantity)}>Add</Button>
         </DialogActions>
       </Dialog>
     </div>

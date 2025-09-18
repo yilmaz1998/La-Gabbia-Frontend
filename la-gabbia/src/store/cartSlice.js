@@ -1,7 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const savedCart = JSON.parse(localStorage.getItem('cart')) || []
+
 const initialState = {
-    items: []
+    items: savedCart
 };
 
 const cartSlice = createSlice({
@@ -11,32 +13,37 @@ const cartSlice = createSlice({
         addToCart: (state, action) => {
             const item = action.payload;
             const existingItem = state.items.find(
-                i => i.menu_item_id === item.menu_item_id && i.introduction === item.introduction
+                i => i.menu_item_id === item.menu_item_id && i.instruction === item.instruction
               );
         
             if (existingItem) {
                 existingItem.quantity += 1;
             } else {
                 state.items.push(item);
+                localStorage.setItem('cart', JSON.stringify(state.items));
             }
+            localStorage.setItem('cart', JSON.stringify(state.items))
         },
         removeItem: (state, action) => {
-            const { menu_item_id, introduction } = action.payload;
+            const { menu_item_id, instruction } = action.payload;
             state.items = state.items.filter(
-              i => !(i.menu_item_id === menu_item_id && i.introduction === introduction)
+              i => !(i.menu_item_id === menu_item_id && i.instruction === instruction)
             );
+            localStorage.setItem('cart', JSON.stringify(state.items))
         },
         updateQuantity: (state, action) => {
-            const { menu_item_id, introduction, quantity } = action.payload;
+            const { menu_item_id, instruction, quantity } = action.payload;
             const item = state.items.find(
-              i => i.menu_item_id === menu_item_id && i.introduction === introduction
+              i => i.menu_item_id === menu_item_id && i.instruction === instruction
             );
             if (item) {
               item.quantity = quantity;
             }
+            localStorage.setItem('cart', JSON.stringify(state.items))
         },
         clearCart: (state) => {
             state.items = [];
+            localStorage.removeItem('cart')
         }
     }
 });
