@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -9,10 +9,12 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { removeItem, updateQuantity, clearCart } from '../store/cartSlice';
+import Checkout from '../components/Checkout';
 
 const Cart = () => {
   const cartItems = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
 
   const handleRemoveItem = (item) => {
     dispatch(removeItem({ menu_item_id: item.menu_item_id, instruction: item.instruction }));
@@ -65,7 +67,18 @@ const Cart = () => {
           <Button onClick={handleClearCart} variant="outlined" color="error">
             Clear Cart
           </Button>
+          <Button
+              onClick={() => setOpen(true)}
+              variant="outlined"
+              sx={{ ml: 2 }}
+            >
+              Complete Order
+            </Button>
         </div>
+        <Checkout
+            open={open}
+            onClose={() => setOpen(false)}
+          />
       </>
       )}
     </div>
