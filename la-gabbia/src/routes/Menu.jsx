@@ -41,8 +41,15 @@ const Menu = () => {
   }, [])
 
   const addItemToCart = (item, instructions, quantity) => {
-    console.log(item);
-    dispatch(addToCart({ ...item, instruction: instructions, quantity }));
+    console.log(item, instructions, quantity);
+    dispatch(addToCart({
+      menu_item_id: item.id,
+      name: item.name,
+      price: item.price,
+      image_url: item.image_url,
+      instruction: instructions.trim(),
+      quantity
+    }));
     handleDialogClose();
   }
 
@@ -52,8 +59,10 @@ const Menu = () => {
   }
 
   const handleDialogClose = () => {
-    setOpen(false)
-    setSelectedItem(null)
+    setOpen(false);
+    setSelectedItem(null);
+    setInstructions('');
+    setQuantity(1);
   }
 
   const getItemsByType = (type) => menuItems.filter(item => item.type === type)
