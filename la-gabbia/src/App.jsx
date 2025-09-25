@@ -6,6 +6,7 @@ import Orders from "./routes/Orders"
 import HomePage from "./routes/HomePage"
 import Header from "./components/Header"
 import AdminLogin from "./routes/AdminLogin"
+import ProtectedRoute from "./components/ProtectedRoute"
 
 const Layout = () => {
   const location = useLocation();
@@ -20,7 +21,13 @@ const Layout = () => {
           <Route path="/menu" element={<Menu />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/admin" element={<AdminLogin />} />
-          <Route path="/admin/orders" element={<Orders />} />
+          <Route path="/admin/orders" 
+            element={
+              <ProtectedRoute>
+                <Orders />
+              </ProtectedRoute>
+            } 
+          />
         </Routes>
       </div>
     </>

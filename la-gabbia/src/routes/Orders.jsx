@@ -1,8 +1,16 @@
 import React from 'react'
 
 const Orders = () => {
+
+  const handleLogOut = () => {
+    localStorage.removeItem("adminToken");
+    window.location.reload();
+  }
+
   return (
-    <div>Orders</div>
+    <div>
+      <button onClick={handleLogOut}>Log Out</button>
+    </div>
   )
 }
 
