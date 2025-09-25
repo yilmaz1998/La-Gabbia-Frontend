@@ -1,24 +1,36 @@
-import { Routes, Route, BrowserRouter } from "react-router-dom"
+import { Routes, Route, BrowserRouter, useLocation } from "react-router-dom"
 
 import Menu from "./routes/Menu"
 import Cart from "./routes/Cart"
 import Orders from "./routes/Orders"
-
+import HomePage from "./routes/HomePage"
 import Header from "./components/Header"
+import AdminLogin from "./routes/AdminLogin"
 
-const App = () => {
+const Layout = () => {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
   return (
-    <BrowserRouter>
-      <Header />
-      <div style={{ paddingTop: '72px' }}> 
-      <Routes>
-        <Route path="/menu" element={<Menu />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/orders" element={<Orders />} />
-      </Routes>
+    <>
+      {!isAdminRoute && <Header />}
+      <div style={{ paddingTop: isAdminRoute ? "0" : "72px" }}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/menu" element={<Menu />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/admin" element={<AdminLogin />} />
+          <Route path="/admin/orders" element={<Orders />} />
+        </Routes>
       </div>
-    </BrowserRouter>
-  )
+    </>
+  );
 }
 
-export default App
+const App = () => (
+  <BrowserRouter>
+    <Layout />
+  </BrowserRouter>
+);
+
+export default App;
