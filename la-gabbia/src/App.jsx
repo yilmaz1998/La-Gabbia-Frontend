@@ -7,6 +7,8 @@ import HomePage from "./routes/HomePage"
 import Header from "./components/Header"
 import AdminLogin from "./routes/AdminLogin"
 import ProtectedRoute from "./components/ProtectedRoute"
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Layout = () => {
   const location = useLocation();
@@ -37,6 +39,7 @@ const Layout = () => {
 const App = () => (
   <BrowserRouter>
     <Layout />
+    <ToastContainer position="top-right" autoClose={3000} />
   </BrowserRouter>
 );
 

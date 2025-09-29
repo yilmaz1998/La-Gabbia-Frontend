@@ -5,14 +5,36 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { axiosInstance } from '../lib/axios';
+import { clearCart } from '../store/cartSlice';
+import { toast } from 'react-toastify';
 
 const Checkout = ({ open, onClose }) => {
     const [name, setName] = useState('');
     const [address, setAddress] = useState('');
     const [email, setEmail] = useState('');
     const cartItems = useSelector((state) => state.cart.items);
+    const dispatch = useDispatch();
 
+    const handlePlaceOrder = async () => {
+        try {
+            const response = await axiosInstance.post('/orders', {
+                customer_name: name,
+                customer_address: address,
+                customer_email: email,
+                items: cartItems,
+            });
+            if (response.status === 201) {
+                toast.success("✅ Order placed successfully!");
+                onClose();
+                dispatch(clearCart());
+            }
+        } catch (error) {
+            console.error("Error placing order:", error)
+            alert("Something went wrong. Please try again.")
+        }
+    }
     return (
         <div>
             <Dialog open={open} onClose={onClose}>
@@ -59,7 +81,7 @@ const Checkout = ({ open, onClose }) => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={onClose}>Cancel</Button>
-                    <Button>Place Order</Button>
+                    <Button onClick={handlePlaceOrder}>Place Order</Button>
                 </DialogActions>
             </Dialog>
         </div>
