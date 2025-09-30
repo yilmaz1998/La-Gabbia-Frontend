@@ -50,6 +50,7 @@ const AdminLogin = () => {
             onChange={(e) => setPassword(e.target.value)}
         />
         <Button type='submit' variant="contained" color="primary" fullWidth style={{ marginTop: '24px' }}>Login</Button>
+        <Button variant="outlined" color="secondary" fullWidth style={{ marginTop: '12px' }} onClick={() => navigate("/")}>Back to Home</Button>
       </form>
     </div>
     </div>

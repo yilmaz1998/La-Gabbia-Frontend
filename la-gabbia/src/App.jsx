@@ -13,11 +13,12 @@ import 'react-toastify/dist/ReactToastify.css';
 const Layout = () => {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith('/admin');
+  const homePage = location.pathname === '/';
 
   return (
     <>
-      {!isAdminRoute && <Header />}
-      <div style={{ paddingTop: isAdminRoute ? "0" : "72px" }}>
+      {!isAdminRoute && !homePage && <Header />}
+      <div style={{ paddingTop: isAdminRoute || homePage ? "0" : "72px" }}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/menu" element={<Menu />} />
