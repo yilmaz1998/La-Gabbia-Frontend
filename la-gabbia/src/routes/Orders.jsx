@@ -30,6 +30,38 @@ const Orders = () => {
     window.location.reload();
   }
 
+  const handleUpdateStatus = async (orderId) => {
+    try {
+      const response = await axiosInstance.patch(
+        `/admin/orders/${orderId}/status`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('adminToken')}`
+          }
+        }
+      );
+        setOrders(prevOrders =>
+        prevOrders.map(order =>
+          order.id === orderId
+            ? { ...order, status: getNextStatus(order.status) }
+            : order
+        )
+      );
+      console.log(response.data.message);
+    } catch (error) {
+      console.error('Error updating order status:', error);
+    }
+  };
+  
+  const getNextStatus = (currentStatus) => {
+    const sequence = ['pending', 'preparing', 'out for delivery'];
+    const currentIndex = sequence.indexOf(currentStatus);
+    return currentIndex < sequence.length - 1
+      ? sequence[currentIndex + 1]
+      : currentStatus;
+  };
+
   return (
     <div>
       <header className="flex px-4 py-4 items-center justify-between bg-gray-900">
@@ -60,7 +92,14 @@ const Orders = () => {
                   </li>
                 ))}
               </ul>
-              <Button>Update Status</Button>
+              <Button variant='contained' onClick={() => handleUpdateStatus(order.id)} 
+              disabled={order.status === "out for delivery"}>
+                 {order.status === "pending"
+                 ? "Mark as Preparing"
+                 : order.status === "preparing"
+                 ? "Mark as Out for Delivery"
+                 : "Delivered"}
+              </Button>
               <Button>Delete Order</Button>
             </div>
           ))}
