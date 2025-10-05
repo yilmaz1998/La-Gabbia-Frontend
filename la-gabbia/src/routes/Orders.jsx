@@ -62,6 +62,23 @@ const Orders = () => {
       : currentStatus;
   };
 
+  const handleDeleteOrder = async (orderId) => {
+    try {
+      await axiosInstance.delete(
+        `/admin/orders/${orderId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('adminToken')}`
+          }
+        }
+      );
+      setOrders(prevOrders => prevOrders.filter(order => order.id !== orderId));
+      console.log('Order deleted successfully');
+    } catch (error) {
+      console.error('Error deleting order:', error);
+    }
+  }
+
   return (
     <div>
       <header className="flex px-4 py-4 items-center justify-between bg-gray-900">
@@ -100,7 +117,7 @@ const Orders = () => {
                  ? "Mark as Out for Delivery"
                  : "Delivered"}
               </Button>
-              <Button>Delete Order</Button>
+              <Button sx={{ml: 1}} variant="outlined" color='error' onClick={() => handleDeleteOrder(order.id)}>Delete Order</Button>
             </div>
           ))}
         </div>
