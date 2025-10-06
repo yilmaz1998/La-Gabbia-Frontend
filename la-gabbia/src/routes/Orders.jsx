@@ -79,6 +79,16 @@ const Orders = () => {
     }
   }
 
+  const newOrdersCount = orders.filter(order => order.status === "pending").length;
+
+  useEffect(() => {
+    if (newOrdersCount > 0) {
+      document.title = `(${newOrdersCount}) New Orders - La Gabbia`;
+    } else {
+      document.title = 'La Gabbia';
+    }
+  }, [newOrdersCount]);
+
   return (
     <div>
       <header className="flex px-4 py-4 items-center justify-between bg-gray-900">
@@ -86,7 +96,14 @@ const Orders = () => {
         <Button onClick={handleLogOut}>Log Out</Button>
       </header>
       <div className='p-4'>
-      <h1 className='text-center mt-8 text-4xl'>Orders</h1>
+      <h1 className="text-center mt-8 text-4xl flex justify-center items-center gap-3">
+        Orders
+      {newOrdersCount > 0 && (
+      <span className="text-base font-medium bg-red-500 text-white px-3 py-1 rounded-full shadow-md">
+      {newOrdersCount} New
+      </span>
+      )}
+      </h1>
       {loading ? (
         <p>Loading...</p>
       ) : (
@@ -94,7 +111,12 @@ const Orders = () => {
           {orders.length === 0 ? (
             <p>No orders found.</p>
           ) : orders.map(order => (
-            <div key={order.id} className='mt-6 border rounded px-4 py-4'>
+            <div key={order.id} className={`mt-6 border rounded px-4 py-4 ${
+              order.status === "pending" ? "bg-red-300" :
+              order.status === "preparing" ? "bg-amber-300" :
+              order.status === "out for delivery" ? "bg-green-300" :
+              ""
+            }`}>
               <h2 className="text-lg font-semibold text-blue-800">Order ID: {order.id}</h2>
               <p><span className="font-semibold text-blue-800">Name:</span> {order.customer_name}</p>
               <p><span className="font-semibold text-blue-800">Address:</span> {order.customer_address}</p>
@@ -109,6 +131,7 @@ const Orders = () => {
                   </li>
                 ))}
               </ul>
+              <div className='mt-2'>
               <Button variant='contained' onClick={() => handleUpdateStatus(order.id)} 
               disabled={order.status === "out for delivery"}>
                  {order.status === "pending"
@@ -117,7 +140,8 @@ const Orders = () => {
                  ? "Mark as Out for Delivery"
                  : "Delivered"}
               </Button>
-              <Button sx={{ml: 1}} variant="outlined" color='error' onClick={() => handleDeleteOrder(order.id)}>Delete Order</Button>
+              <Button sx={{ml: 1}} variant="contained" color='error' onClick={() => handleDeleteOrder(order.id)}>Delete Order</Button>
+              </div>
             </div>
           ))}
         </div>
