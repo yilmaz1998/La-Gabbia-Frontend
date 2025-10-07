@@ -51,7 +51,7 @@ const Orders = () => {
 
   const handleLogOut = () => {
     localStorage.removeItem("adminToken");
-    window.location.reload();
+    navigate("/admin");
   }
 
   const handleUpdateStatus = async (orderId) => {
