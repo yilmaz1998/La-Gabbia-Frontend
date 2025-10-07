@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { axiosInstance } from '../lib/axios'
 import Button from '@mui/material/Button';
 import { IoFastFoodOutline } from "react-icons/io5";
+import io from "socket.io-client";
+import notificationSoundFile from '../sound/notification.mp3';
+
+const notificationSound = new Audio(notificationSoundFile);
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -24,6 +28,26 @@ const Orders = () => {
     }
     fetchOrders()
   }, [])
+
+  useEffect(() => {
+    const socket = io(import.meta.env.VITE_API_BASE_URL);
+  
+    socket.on("connect", () => {
+      console.log("Socket connected", socket.id);
+    });
+  
+    const handleNewOrder = (newOrder) => {
+      setOrders(prev => [newOrder, ...prev]);
+      notificationSound.play().catch(err => console.log("Sound play error:", err));
+    }
+  
+    socket.on("new-order", handleNewOrder);
+  
+    return () => {
+      socket.off("new-order", handleNewOrder);
+      socket.disconnect();
+    }
+  }, []);
 
   const handleLogOut = () => {
     localStorage.removeItem("adminToken");
@@ -125,7 +149,7 @@ const Orders = () => {
               <p><span className="font-semibold text-blue-800">Created:</span> {new Date(order.created_at).toLocaleString()}</p>
               <h3 className='font-semibold text-blue-800'>Items:</h3>
               <ul>
-                {order.items.map(item => (
+              {order.items && order.items.map(item => (
                   <li key={item.id}>
                     {item.quantity} x {item.name} {item.instruction && `(${item.instruction})`}
                   </li>

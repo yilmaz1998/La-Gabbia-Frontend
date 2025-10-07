@@ -17,7 +17,8 @@ const Checkout = ({ open, onClose }) => {
     const cartItems = useSelector((state) => state.cart.items);
     const dispatch = useDispatch();
 
-    const handlePlaceOrder = async () => {
+    const handlePlaceOrder = async (e) => {
+        e.preventDefault();
         try {
             const response = await axiosInstance.post('/orders', {
                 customer_name: name,
