@@ -11,6 +11,7 @@ const notificationSound = new Audio(notificationSoundFile);
 const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchOrders = async () => {
