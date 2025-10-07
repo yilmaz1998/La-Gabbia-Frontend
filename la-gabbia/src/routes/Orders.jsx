@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import { IoFastFoodOutline } from "react-icons/io5";
 import io from "socket.io-client";
 import notificationSoundFile from '../sound/notification.mp3';
+import { useNavigate } from 'react-router-dom';
 
 const notificationSound = new Audio(notificationSoundFile);
 
