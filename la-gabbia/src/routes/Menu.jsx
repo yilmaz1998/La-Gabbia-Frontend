@@ -81,7 +81,7 @@ const Menu = () => {
               <h2 className="text-3xl mb-6">{type}s</h2>
               <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-8">
                 {items.map(item => (
-                  <Card key={item.id} sx={{ maxWidth: 420 }}>
+                  <Card key={item.id} sx={{ maxWidth: 420, borderRadius: 3, boxShadow: 4 }}>
                     <CardMedia
                       sx={{ height: 200 }}
                       image={item.image_url}

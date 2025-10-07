@@ -25,18 +25,9 @@ const cartSlice = createSlice({
         },
         removeItem: (state, action) => {
             const { menu_item_id, instruction } = action.payload;
-            const existingItem = state.items.find(
-                i => i.menu_item_id === menu_item_id && i.instruction === instruction
-            );
-            if (existingItem) {
-                if (existingItem.quantity > 1) {
-                    existingItem.quantity -= 1;
-                } else {
-                    state.items = state.items.filter(
-                        i => !(i.menu_item_id === menu_item_id && i.instruction === instruction)
-                    );
-                }
-            }
+            state.items = state.items.filter(
+                i => !(i.menu_item_id === menu_item_id && i.instruction === instruction)
+              );
             localStorage.setItem('cart', JSON.stringify(state.items));
         },
         updateQuantity: (state, action) => {
